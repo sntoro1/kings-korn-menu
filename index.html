@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>King's Korn — Bill of Fare</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --parchment:#f2e9d6;
+    --parchment-deep:#e9dcc1;
+    --parchment-card:#faf5e9;
+    --ink:#3a2a1c;
+    --ink-soft:#5c4a35;
+    --wine:#8a3540;
+    --wine-deep:#6e2530;
+    --forest:#4a6142;
+    --gold:#b08a45;
+    --gold-bright:#c9a35c;
+    --rule: rgba(58,42,28,0.2);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at top left, rgba(255,255,255,0.15), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(0,0,0,0.12), transparent 55%),
+      var(--parchment);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:'EB Garamond',serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  h1,h2,h3{font-family:'Cinzel',serif; font-weight:700; letter-spacing:0.5px; margin:0;}
+  .flourish{font-family:'Cinzel',serif;}
+
+  /* ---------- Ornamental divider ---------- */
+  .divider{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    color:var(--gold);
+    margin:6px 0 18px;
+  }
+  .divider .line{
+    height:1.5px;
+    flex:1;
+    max-width:90px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .divider .mark{ font-size:19px; }
+
+  /* ---------- Header ---------- */
+  header{
+    padding:40px 20px 22px;
+    text-align:center;
+    position:relative;
+    border-bottom:4px double var(--gold);
+    background:linear-gradient(180deg, rgba(111,31,42,0.06), transparent);
+  }
+  .crest{
+    margin-bottom:6px;
+    display:flex;
+    justify-content:center;
+  }
+  .crest svg{
+    width:132px;
+    height:auto;
+    filter:drop-shadow(0 3px 3px rgba(43,26,16,0.25));
+  }
+  .eyebrow{
+    font-family:'Cinzel',serif;
+    font-size:14px;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    color:var(--forest);
+    margin-bottom:10px;
+  }
+  header h1{
+    font-family:'Cinzel Decorative',serif;
+    font-size:clamp(34px,10vw,50px);
+    color:var(--wine-deep);
+    line-height:1.05;
+    text-shadow: 1px 1px 0 rgba(168,121,44,0.4);
+  }
+  header .subtitle{
+    font-family:'Cinzel',serif;
+    font-size:16px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-top:8px;
+  }
+  header p.sub{
+    margin-top:14px;
+    font-size:19px;
+    font-style:italic;
+    color:var(--ink-soft);
+    max-width:360px;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.5;
+  }
+  header .locale{
+    margin-top:10px;
+    font-family:'Cinzel',serif;
+    font-size:14px;
+    letter-spacing:1.5px;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+  }
+
+  /* ---------- Allergen filter ---------- */
+  .filter-wrap{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:var(--parchment);
+    border-bottom:2px solid var(--gold);
+    padding:14px 16px 16px;
+    box-shadow:0 4px 10px rgba(43,28,16,0.08);
+  }
+  .filter-label{
+    font-family:'Cinzel',serif;
+    font-size:14px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--wine-deep);
+    margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .filter-label button{
+    background:var(--parchment-card);
+    border:1px solid var(--gold);
+    color:var(--ink-soft);
+    font-family:'Cinzel',serif;
+    font-size:13px;
+    letter-spacing:1px;
+    padding:6px 11px;
+    border-radius:3px;
+    cursor:pointer;
+  }
+  .chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .chip{
+    font-family:'EB Garamond',serif;
+    font-weight:600;
+    font-size:16px;
+    padding:7px 13px;
+    border-radius:3px;
+    border:1.5px solid var(--gold);
+    background:var(--parchment-card);
+    color:var(--ink);
+    cursor:pointer;
+    user-select:none;
+    transition:all .15s ease;
+  }
+  .chip.active{
+    background:var(--wine);
+    border-color:var(--wine-deep);
+    color:var(--parchment-card);
+    font-weight:700;
+  }
+
+  /* ---------- Sections ---------- */
+  main{max-width:560px; margin:0 auto; padding:0 16px;}
+  .section-title{
+    padding:38px 4px 8px;
+    text-align:center;
+  }
+  .section-title h2{
+    font-family:'Cinzel Decorative',serif;
+    font-size:29px;
+    color:var(--wine-deep);
+  }
+  .section-title span{
+    display:block;
+    font-family:'Cinzel',serif;
+    font-size:14px;
+    color:var(--forest);
+    letter-spacing:2.5px;
+    margin-top:4px;
+  }
+
+  /* ---------- Scroll card ---------- */
+  .card{
+    background:var(--parchment-card);
+    color:var(--ink);
+    border-radius:2px;
+    margin-bottom:20px;
+    position:relative;
+    padding:20px 20px 16px;
+    transition:opacity .2s ease, filter .2s ease;
+    border:1.5px solid var(--gold);
+    box-shadow:0 5px 0 rgba(43,28,16,0.15), inset 0 0 0 1px rgba(168,121,44,0.15);
+  }
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:5px;
+    border:1px solid rgba(168,121,44,0.35);
+    pointer-events:none;
+  }
+  .card.avoid{ opacity:0.32; filter:grayscale(0.7) sepia(0.2); }
+  .card.safe{ border-color:var(--forest); box-shadow:0 5px 0 var(--forest), inset 0 0 0 1px rgba(74,97,66,0.2); }
+
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:14px;
+    padding-bottom:10px;
+    border-bottom:1px solid var(--rule);
+  }
+  .card-top h3{
+    font-family:'Cinzel',serif;
+    font-size:24px;
+    line-height:1.15;
+    color:var(--ink);
+  }
+  .price{
+    flex-shrink:0;
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--wine) 0%, var(--wine-deep) 70%, #3d0f16 100%);
+    color:var(--parchment-card);
+    font-family:'Cinzel',serif;
+    font-weight:700;
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 2px 4px rgba(0,0,0,0.35), inset 0 0 6px rgba(255,255,255,0.15);
+    text-align:center;
+  }
+  .desc{
+    font-size:18.5px;
+    font-style:italic;
+    margin:10px 0 8px;
+    color:var(--ink-soft);
+  }
+  .status-banner{
+    display:none;
+    font-family:'Cinzel',serif;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:0.5px;
+    padding:6px 10px;
+    border-radius:2px;
+    margin:8px 0;
+    text-align:center;
+  }
+  .status-banner.show{ display:block; }
+  .status-banner.avoid{
+    background:var(--wine);
+    color:var(--parchment-card);
+  }
+  .status-banner.safe{
+    background:var(--forest);
+    color:var(--parchment-card);
+  }
+
+  .allergen-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin:10px 0 4px;
+  }
+  .tag{
+    font-family:'Cinzel',serif;
+    font-size:13px;
+    letter-spacing:0.5px;
+    padding:4px 9px;
+    border-radius:2px;
+    border:1.3px solid var(--ink);
+    background:transparent;
+  }
+  .tag.hit{
+    background:var(--wine);
+    border-color:var(--wine-deep);
+    color:var(--parchment-card);
+  }
+  .tag.none{
+    border-color:var(--forest);
+    color:var(--forest);
+  }
+
+  details{ margin-top:10px; }
+  summary{
+    font-family:'Cinzel',serif;
+    font-size:14px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    cursor:pointer;
+    color:var(--wine);
+    outline:none;
+  }
+  details p{
+    font-size:17px;
+    line-height:1.55;
+    margin:8px 0 2px;
+    color:var(--ink-soft);
+  }
+  .note{
+    font-size:15.5px;
+    font-style:italic;
+    color:var(--wine-deep);
+    font-weight:600;
+    margin-top:6px;
+  }
+
+  .payment-icons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:12px;
+  }
+  .payment-icons span{
+    font-family:'Cinzel',serif;
+    font-size:14px;
+    letter-spacing:0.5px;
+    padding:6px 12px;
+    border:1.3px solid var(--gold);
+    border-radius:3px;
+    color:var(--ink-soft);
+    background:var(--parchment-deep);
+  }
+  .payment-icons span:first-child{
+    border-color:var(--forest);
+    color:var(--forest);
+    font-weight:700;
+  }
+
+  .kitchen-note{
+    margin-top:10px;
+    padding-top:8px;
+    border-top:1px solid var(--rule);
+    font-size:12px;
+  }
+  .allergen-label{
+    font-family:'Cinzel',serif;
+    font-size:11px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--wine-deep);
+    margin-top:10px;
+    margin-bottom:2px;
+  }
+
+  footer{
+    max-width:560px;
+    margin:34px auto 0;
+    padding:26px 20px 10px;
+    border-top:2px double var(--gold);
+    font-size:15.5px;
+    color:var(--ink-soft);
+    line-height:1.7;
+    text-align:center;
+  }
+  footer strong{color:var(--wine-deep); font-family:'Cinzel',serif; letter-spacing:0.5px;}
+  footer .signoff{
+    margin-top:14px;
+    font-family:'Cinzel',serif;
+    font-size:14px;
+    letter-spacing:2px;
+    color:var(--forest);
+    text-transform:uppercase;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="crest">
+    <svg viewBox="0 0 200 230" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="ringBg" cx="45%" cy="35%" r="70%">
+          <stop offset="0%" stop-color="var(--parchment-card)"/>
+          <stop offset="100%" stop-color="var(--parchment-deep)"/>
+        </radialGradient>
+        <linearGradient id="cobGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="var(--gold-bright)"/>
+          <stop offset="100%" stop-color="var(--gold)"/>
+        </linearGradient>
+        <ellipse id="kernel" cx="0" cy="0" rx="6.4" ry="8" fill="var(--wine)" opacity="0.16"/>
+      </defs>
+
+      <!-- outer ring -->
+      <circle cx="100" cy="118" r="92" fill="url(#ringBg)" stroke="var(--gold)" stroke-width="3.5"/>
+      <circle cx="100" cy="118" r="92" fill="none" stroke="var(--wine-deep)" stroke-width="1" opacity="0.35"/>
+
+      <!-- husk leaves -->
+      <path d="M100,168 C68,178 52,196 46,222 C74,212 92,196 100,178 Z" fill="var(--forest)"/>
+      <path d="M100,168 C132,178 148,196 154,222 C126,212 108,196 100,178 Z" fill="var(--forest)"/>
+      <path d="M100,170 C78,182 66,198 62,218 C82,208 96,194 100,176 Z" fill="var(--forest)" opacity="0.55"/>
+      <path d="M100,170 C122,182 134,198 138,218 C118,208 104,194 100,176 Z" fill="var(--forest)" opacity="0.55"/>
+
+      <!-- corn cob -->
+      <rect x="76" y="48" width="48" height="130" rx="24" fill="url(#cobGrad)" stroke="var(--wine-deep)" stroke-width="1.5"/>
+
+      <!-- kernel rows -->
+      <use href="#kernel" x="87" y="62"/><use href="#kernel" x="100" y="62"/><use href="#kernel" x="113" y="62"/>
+      <use href="#kernel" x="93.5" y="74"/><use href="#kernel" x="106.5" y="74"/>
+      <use href="#kernel" x="87" y="86"/><use href="#kernel" x="100" y="86"/><use href="#kernel" x="113" y="86"/>
+      <use href="#kernel" x="93.5" y="98"/><use href="#kernel" x="106.5" y="98"/>
+      <use href="#kernel" x="87" y="110"/><use href="#kernel" x="100" y="110"/><use href="#kernel" x="113" y="110"/>
+      <use href="#kernel" x="93.5" y="122"/><use href="#kernel" x="106.5" y="122"/>
+      <use href="#kernel" x="87" y="134"/><use href="#kernel" x="100" y="134"/><use href="#kernel" x="113" y="134"/>
+      <use href="#kernel" x="93.5" y="146"/><use href="#kernel" x="106.5" y="146"/>
+      <use href="#kernel" x="87" y="158"/><use href="#kernel" x="100" y="158"/><use href="#kernel" x="113" y="158"/>
+    </svg>
+  </div>
+  <div class="eyebrow">Maryland Renaissance Festival</div>
+  <h1>King's Korn</h1>
+  <p class="sub">Peruse our menu, full ingredient lists, allergy information, and accepted forms of payment below.</p>
+  <div class="locale">Crownsville, Maryland</div>
+</header>
+
+<div class="filter-wrap">
+  <div class="filter-label">
+    <span>I must avoid…</span>
+    <button id="clearBtn">CLEAR</button>
+  </div>
+  <div class="chips" id="chipRow">
+    <button class="chip" data-allergen="wheat">Wheat / Gluten</button>
+    <button class="chip" data-allergen="milk">Milk / Dairy</button>
+    <button class="chip" data-allergen="soy">Soy</button>
+    <button class="chip" data-allergen="egg">Egg</button>
+    <button class="chip" data-allergen="peanut">Peanut</button>
+    <button class="chip" data-allergen="treenut">Tree Nut</button>
+  </div>
+</div>
+
+<main>
+
+  <div class="section-title">
+    <h2>Bill of Fare</h2>
+    <div class="divider"><span class="line"></span><span class="mark">❦</span><span class="line"></span></div>
+  </div>
+
+  <!-- CORN ON THE COB -->
+  <div class="card" data-allergens="milk">
+    <div class="card-top">
+      <h3>Sweet Buttered Corn</h3>
+      <div class="price">$5</div>
+    </div>
+    <div class="status-banner"></div>
+    <p class="desc">Local fresh white corn, plucked from the field and dipped in rich, unsalted butter. Ask, and we shall serve it plain.</p>
+    <div class="allergen-row">
+      <span class="tag" data-tag="milk">Milk (from butter — omit on request)</span>
+    </div>
+    <p class="note">No packaged label — corn and butter are the only two ingredients.</p>
+  </div>
+
+  <!-- MEAT PIE -->
+  <div class="card" data-allergens="wheat,soy,milk,egg">
+    <div class="card-top">
+      <h3>Meat Pie</h3>
+      <div class="price">$8</div>
+    </div>
+    <div class="status-banner"></div>
+    <p class="desc">Pepperoni and sausage, mozzarella, and a savory tomato sauce, baked within a flaky crust fit for a feast.</p>
+    <div class="allergen-row">
+      <span class="tag" data-tag="wheat">Wheat</span>
+      <span class="tag" data-tag="soy">Soy</span>
+      <span class="tag" data-tag="milk">Milk</span>
+      <span class="tag" data-tag="egg">Egg</span>
+    </div>
+    <details>
+      <summary>View full ingredient list</summary>
+      <p><strong>Filling:</strong> pepperoni (pork &amp; beef, salt, pepper, dextrose, lactic acid starter culture, oleoresin of paprika, flavoring, sodium nitrate, BHA, citric acid), sausage (pork, water, spices, salt, sugar &amp; flavoring), mozzarella cheese (cultured pasteurized milk, salt, calcium chloride, enzymes, powdered cellulose), water, tomato sauce (tomato paste, water, salt, citric acid, spice, tomato fiber, natural flavor), tomato paste (tomatoes, citric acid), onion powder, garlic powder, basil, oregano.</p>
+      <p><strong>Crust:</strong> enriched flour (wheat flour, malted barley flour, niacin, reduced iron, thiamine mononitrate, riboflavin, folic acid, potassium bromate, enzyme), all vegetable shortening (palm oil, water, soybean oil, salt, soy lecithin, natural flavor, beta carotene, vitamin A palmitate), water, egg.</p>
+    </details>
+  </div>
+
+  <!-- SPINACH PIE / SPANAKOPITA -->
+  <div class="card" data-allergens="wheat,milk,egg,treenut">
+    <div class="card-top">
+      <h3>Spinach Pie</h3>
+      <div class="price">$8</div>
+    </div>
+    <div class="status-banner"></div>
+    <p class="desc">A traditional spanakopita — spinach, feta, ricotta, and sweet herbs, wrapped in fillo as delicate as parchment.</p>
+    <div class="allergen-row">
+      <span class="tag" data-tag="wheat">Wheat</span>
+      <span class="tag" data-tag="milk">Milk</span>
+      <span class="tag" data-tag="egg">Egg</span>
+      <span class="tag" data-tag="treenut">Tree Nut (shared equipment)</span>
+    </div>
+    <details>
+      <summary>View full ingredient list</summary>
+      <p>Spinach, fillo dough (enriched wheat flour [wheat flour, malted barley flour, niacin, reduced iron, thiamine mononitrate, riboflavin, folic acid], water, tapioca starch, malted barley flour, expeller pressed canola oil, salt, preservatives [potassium sorbate, calcium propionate, citric acid], canola lecithin, rapeseed lecithin, tricalcium phosphate, salt, less than 1% enzymes), onion, cream cheese (pasteurized milk, cultures, salt, stabilizer [locust bean gum]), feta cheese (pasteurized milk, cultures, salt, enzymes), ricotta cheese (whey, vinegar, salt), expeller pressed canola oil, clarified sweet butter (pasteurized cream), panko (unbleached and unbromated wheat flour, sugar, salt, yeast, ascorbic acid), parmesan cheese (milk, salt, starter culture, enzymes [lipase, microbial rennet]), corn starch, eggs, garlic, dill, parsley, lemon juice, sea salt, black pepper.</p>
+      <p class="note">Produced on equipment shared with tree nuts.</p>
+    </details>
+  </div>
+
+  <!-- SAUSAGE ON A STICK -->
+  <div class="card" data-allergens="">
+    <div class="card-top">
+      <h3>Smoked Sausage On-A-Stick</h3>
+      <div class="price">$8</div>
+    </div>
+    <div class="status-banner"></div>
+    <p class="desc">Pork and beef sausage, smoked long and slow, then baked to seal in every bit of its smoky richness — served hot upon a stick.</p>
+    <div class="allergen-row">
+      <span class="tag none" data-tag="none">No major allergens listed</span>
+    </div>
+    <details>
+      <summary>View full ingredient list</summary>
+      <p>Pork, beef, water, salt, corn syrup, dextrose, spices, sodium phosphate, granulated garlic, sodium erythorbate, sodium nitrite.</p>
+    </details>
+  </div>
+
+  <!-- RED BEANS & RICE -->
+  <div class="card" data-allergens="wheat,soy,milk">
+    <div class="card-top">
+      <h3>Cajun Red Beans &amp; Rice</h3>
+      <div class="price">$8</div>
+    </div>
+    <div class="status-banner"></div>
+    <p class="desc">A homemade dish, brought back by popular demand — andouille sausage, peppers, onions, and Cajun spices simmered together and served upon a bed of rice.</p>
+    <div class="allergen-row">
+      <span class="tag" data-tag="wheat">Wheat</span>
+      <span class="tag" data-tag="soy">Soy</span>
+      <span class="tag" data-tag="milk">Milk</span>
+    </div>
+    <details>
+      <summary>View full ingredient list</summary>
+      <p><strong>Beans:</strong> dark red kidney beans, water, salt, calcium chloride, disodium EDTA (to preserve color).</p>
+      <p><strong>Sausage:</strong> pork, beef, water, salt, corn syrup, dextrose, spices, sodium phosphate, granulated garlic, sodium erythorbate, sodium nitrite.</p>
+      <p><strong>Also:</strong> green peppers, onions, garlic, oregano leaves, thyme, basil, paprika, white pepper, ground mustard, granulated garlic, onion powder, cayenne pepper, cumin, salt, pepper, chicken stock (chicken meat &amp; juices, salt, sugar, chicken fat, hydrolyzed wheat/corn/soy proteins, whey, maltodextrin, onion powder, hydrogenated cottonseed oil, disodium inosinate &amp; guanylate, corn oil, autolyzed yeast extract, natural extractives of turmeric &amp; annatto, natural flavors, dextrose, lactic acid).</p>
+    </details>
+  </div>
+
+  <!-- PB PIE ON A STICK -->
+  <div class="card" data-allergens="peanut,soy,wheat,milk,treenut">
+    <div class="card-top">
+      <h3>Frozen Peanut Butter Pie on a Stick</h3>
+      <div class="price">$7</div>
+    </div>
+    <div class="status-banner"></div>
+    <p class="desc">A frozen peanut butter pie, dipped in rich fudge and set upon a stick — a sweet treat fit for royalty.</p>
+    <div class="allergen-row">
+      <span class="tag" data-tag="peanut">Peanut</span>
+      <span class="tag" data-tag="soy">Soy</span>
+      <span class="tag" data-tag="wheat">Wheat</span>
+      <span class="tag" data-tag="milk">Milk</span>
+      <span class="tag" data-tag="treenut">Tree Nut (facility)</span>
+    </div>
+    <details>
+      <summary>View full ingredient list</summary>
+      <p>Peanut butter (peanuts, sugar, hydrogenated vegetable oil [rapeseed, cottonseed], salt), margarine (soybean oil, partially hydrogenated soybean oil, water, salt, soy lecithin, vegetable monoglycerides, potassium sorbate &amp; citric acid, artificial color, beta carotene, vitamin A palmitate), fudge coating (sugar, coconut oil, cocoa, chocolate liquor, soy lecithin, vanilla, salt), powdered sugar, cookie meal (enriched flour, sugar, vegetable oil, cocoa, invert sugar, corn flour, chocolate, salt, leavening, whey, natural &amp; artificial flavors, soy lecithin), artificial flavor (water, high fructose corn syrup, vanillin, ethyl-vanillin, propylene glycol), corn starch.</p>
+      <p class="note">Made in a facility that also processes tree nuts.</p>
+    </details>
+  </div>
+
+  <!-- COOKIES & CREAM -->
+  <div class="card" data-allergens="milk,wheat,soy">
+    <div class="card-top">
+      <h3>Cookies &amp; Cream Milkshake</h3>
+      <div class="price">$8</div>
+    </div>
+    <div class="status-banner"></div>
+    <p class="desc">Vanilla ice cream churned together with Oreo cookies and milk.</p>
+    <div class="allergen-row">
+      <span class="tag" data-tag="milk">Milk</span>
+      <span class="tag" data-tag="wheat">Wheat</span>
+      <span class="tag" data-tag="soy">Soy</span>
+    </div>
+    <details>
+      <summary>View full ingredient list</summary>
+      <p><strong>Vanilla ice cream:</strong> cream, skim milk, liquid sugar (sugar, water), high fructose corn syrup, corn syrup, whey, mono and diglycerides, guar gum, carrageenan, locust bean gum, tara gum, artificial vanilla flavor.</p>
+      <p><strong>Oreo cookies:</strong> unbleached enriched flour (wheat flour, niacin, reduced iron, thiamine mononitrate, riboflavin, folic acid), sugar, palm oil, soybean and/or canola oil, cocoa processed with alkali, high fructose corn syrup, leavening (baking soda and/or calcium phosphate), salt, soy lecithin, chocolate, artificial flavor.</p>
+      <p><strong>Plus:</strong> milk.</p>
+      <p class="note">Oreo packaging lists Contains: Wheat, Soy.</p>
+    </details>
+  </div>
+
+  <!-- CHAI -->
+  <div class="card" data-allergens="milk">
+    <div class="card-top">
+      <h3>Chai Milkshake</h3>
+      <div class="price">$8</div>
+    </div>
+    <div class="status-banner"></div>
+    <p class="desc">Vanilla ice cream blended with chai tea concentrate — the milkshake for which our humble stand is renowned.</p>
+    <div class="allergen-row">
+      <span class="tag" data-tag="milk">Milk</span>
+    </div>
+    <details>
+      <summary>View full ingredient list</summary>
+      <p><strong>Vanilla ice cream:</strong> cream, skim milk, liquid sugar (sugar, water), high fructose corn syrup, corn syrup, whey, mono and diglycerides, guar gum, carrageenan, locust bean gum, tara gum, artificial vanilla flavor.</p>
+      <p><strong>Chai tea concentrate:</strong> water, organic cane sugar, organic black tea, organic vanilla extract, organic spice extracts, organic honey, citric acid, natural flavor.</p>
+      <p class="note">Chai concentrate is gluten-free and contains no milk, egg, soy, or nuts on its own.</p>
+    </details>
+  </div>
+
+  <!-- CHOCOLATE MILK -->
+  <div class="card" data-allergens="milk">
+    <div class="card-top">
+      <h3>Chocolate Milkshake</h3>
+      <div class="price">$8</div>
+    </div>
+    <div class="status-banner"></div>
+    <p class="desc">Rich chocolate ice cream blended with milk, smooth and sweet.</p>
+    <div class="allergen-row">
+      <span class="tag" data-tag="milk">Milk</span>
+    </div>
+    <details>
+      <summary>View full ingredient list</summary>
+      <p><strong>Chocolate ice cream:</strong> cream, skim milk, liquid sugar (sugar, water), high fructose corn syrup, corn syrup, whey, cocoa processed with alkali, mono and diglycerides, guar gum, carrageenan, locust bean gum, tara gum.</p>
+      <p><strong>Plus:</strong> milk.</p>
+    </details>
+  </div>
+
+  <!-- PUMPKIN SPICE -->
+  <div class="card" data-allergens="milk">
+    <div class="card-top">
+      <h3>Pumpkin Spice Milkshake</h3>
+      <div class="price">$8</div>
+    </div>
+    <div class="status-banner"></div>
+    <p class="desc">Pumpkin ice cream blended with chai tea concentrate, a taste of autumn in every sip.</p>
+    <div class="allergen-row">
+      <span class="tag" data-tag="milk">Milk</span>
+    </div>
+    <details>
+      <summary>View full ingredient list</summary>
+      <p><strong>Pumpkin ice cream:</strong> milk, cream, pumpkin puree (pumpkin puree, sugar, molasses, corn syrup, salt, cinnamon, ginger, nutmeg, cloves, natural flavor, citric acid), sugar, corn syrup, nonfat dry milk, whey, guar gum, mono &amp; diglycerides, xanthan gum, polysorbate 80, carrageenan.</p>
+      <p><strong>Chai tea concentrate:</strong> water, organic cane sugar, organic black tea, organic vanilla extract, organic spice extracts, organic honey, citric acid, natural flavor.</p>
+      <p class="note">Chai concentrate is gluten-free and contains no milk, egg, soy, or nuts on its own.</p>
+    </details>
+  </div>
+
+  <div class="section-title" style="padding-top:34px;">
+    <h2>A Proclamation on Payment</h2>
+    <span>HOW WE ACCEPT COIN &amp; CARD</span>
+    <div class="divider"><span class="line"></span><span class="mark">❦</span><span class="line"></span></div>
+  </div>
+
+  <div class="card payment-card" data-allergens="">
+    <p class="desc" style="margin-top:0;">We gladly accept <strong>cash</strong>, as well as Visa, Mastercard, American Express, Discover, Apple Pay, and contactless (tap-to-pay) cards.</p>
+    <div class="payment-icons">
+      <span>Cash</span><span>Visa</span><span>Mastercard</span><span>Amex</span><span>Discover</span><span>Apple Pay</span><span>Tap to Pay</span>
+    </div>
+    <p class="note" style="margin-top:12px;">As required by Maryland law, a 6% sales tax is due. For those paying in cash, sales tax is included in thy menu price. For those paying by card, sales tax shall be added to thy total.</p>
+  </div>
+
+</main>
+
+<footer>
+  Our lords and ladies are pleased to serve thee. Tips are not expected, but are certainly appreciated. Dishes are prepared in a shared kitchen and grill area, so trace contact with wheat, milk, soy, egg, peanut, and tree nut is possible even where not named above.
+  <div class="signoff">King's Korn LLC · Maryland Renaissance Festival</div>
+</footer>
+
+<script>
+  document.querySelectorAll('main .card:not(.payment-card)').forEach(card=>{
+    const row = card.querySelector('.allergen-row');
+    if(row){
+      const label = document.createElement('div');
+      label.className = 'allergen-label';
+      label.textContent = 'Allergies Noted';
+      row.parentNode.insertBefore(label, row);
+    }
+    const p = document.createElement('p');
+    p.className = 'note kitchen-note';
+    p.textContent = 'This is an open kitchen. While we take care to avoid cross-contact between allergens, it is possible.';
+    card.appendChild(p);
+  });
+
+  const active = new Set();
+  const chips = document.querySelectorAll('.chip');
+  const cards = document.querySelectorAll('.card');
+  const clearBtn = document.getElementById('clearBtn');
+
+  function render(){
+    const filtering = active.size > 0;
+    cards.forEach(card => {
+      const banner = card.querySelector('.status-banner');
+      if(!banner) return;
+      const allergens = (card.dataset.allergens || '').split(',').filter(Boolean);
+      const hit = allergens.some(a => active.has(a));
+
+      card.classList.toggle('avoid', filtering && hit);
+      card.classList.toggle('safe', filtering && !hit);
+
+      if(!filtering){
+        banner.className = 'status-banner';
+        banner.textContent = '';
+      } else if(hit){
+        banner.className = 'status-banner show avoid';
+        banner.textContent = '⚠ Contains what you\u2019re avoiding';
+      } else {
+        banner.className = 'status-banner';
+        banner.textContent = '';
+      }
+
+      card.querySelectorAll('.tag').forEach(tag=>{
+        const t = tag.dataset.tag;
+        tag.classList.toggle('hit', active.has(t));
+      });
+    });
+  }
+
+  chips.forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      const a = chip.dataset.allergen;
+      if(active.has(a)){ active.delete(a); chip.classList.remove('active'); }
+      else { active.add(a); chip.classList.add('active'); }
+      render();
+    });
+  });
+
+  clearBtn.addEventListener('click', ()=>{
+    active.clear();
+    chips.forEach(c=>c.classList.remove('active'));
+    render();
+  });
+</script>
+
+</body>
+</html>
