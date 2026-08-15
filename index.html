@@ -391,41 +391,55 @@
           <stop offset="0%" stop-color="var(--parchment-card)"/>
           <stop offset="100%" stop-color="var(--parchment-deep)"/>
         </radialGradient>
-        <linearGradient id="cobGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="var(--gold-bright)"/>
-          <stop offset="100%" stop-color="var(--gold)"/>
-        </linearGradient>
-        <ellipse id="kernel" cx="0" cy="0" rx="6.4" ry="8" fill="var(--wine)" opacity="0.16"/>
       </defs>
 
       <!-- outer ring -->
       <circle cx="100" cy="118" r="92" fill="url(#ringBg)" stroke="var(--gold)" stroke-width="3.5"/>
       <circle cx="100" cy="118" r="92" fill="none" stroke="var(--wine-deep)" stroke-width="1" opacity="0.35"/>
 
-      <!-- husk leaves -->
-      <path d="M100,168 C68,178 52,196 46,222 C74,212 92,196 100,178 Z" fill="var(--forest)"/>
-      <path d="M100,168 C132,178 148,196 154,222 C126,212 108,196 100,178 Z" fill="var(--forest)"/>
-      <path d="M100,170 C78,182 66,198 62,218 C82,208 96,194 100,176 Z" fill="var(--forest)" opacity="0.55"/>
-      <path d="M100,170 C122,182 134,198 138,218 C118,208 104,194 100,176 Z" fill="var(--forest)" opacity="0.55"/>
+      <!-- sun -->
+      <circle cx="100" cy="76" r="17" fill="var(--gold-bright)" opacity="0.9"/>
 
-      <!-- corn cob -->
-      <rect x="76" y="48" width="48" height="130" rx="24" fill="url(#cobGrad)" stroke="var(--wine-deep)" stroke-width="1.5"/>
+      <!-- ground -->
+      <path d="M12,182 C60,168 140,168 188,182 L188,190 C120,204 80,204 12,190 Z" fill="var(--gold)" opacity="0.35"/>
+      <path d="M12,188 L188,188" stroke="var(--wine-deep)" stroke-width="1.5" opacity="0.4"/>
 
-      <!-- kernel rows -->
-      <use href="#kernel" x="87" y="62"/><use href="#kernel" x="100" y="62"/><use href="#kernel" x="113" y="62"/>
-      <use href="#kernel" x="93.5" y="74"/><use href="#kernel" x="106.5" y="74"/>
-      <use href="#kernel" x="87" y="86"/><use href="#kernel" x="100" y="86"/><use href="#kernel" x="113" y="86"/>
-      <use href="#kernel" x="93.5" y="98"/><use href="#kernel" x="106.5" y="98"/>
-      <use href="#kernel" x="87" y="110"/><use href="#kernel" x="100" y="110"/><use href="#kernel" x="113" y="110"/>
-      <use href="#kernel" x="93.5" y="122"/><use href="#kernel" x="106.5" y="122"/>
-      <use href="#kernel" x="87" y="134"/><use href="#kernel" x="100" y="134"/><use href="#kernel" x="113" y="134"/>
-      <use href="#kernel" x="93.5" y="146"/><use href="#kernel" x="106.5" y="146"/>
-      <use href="#kernel" x="87" y="158"/><use href="#kernel" x="100" y="158"/><use href="#kernel" x="113" y="158"/>
+      <!-- FIELD OF CORN STALKS -->
+      <!-- far row, shorter, lighter -->
+      <g opacity="0.55" stroke="var(--forest)">
+        <path d="M46,188 L44,142" fill="none" stroke-width="3" stroke-linecap="round"/>
+        <path d="M44,160 C34,155 27,148 23,140 C33,143 41,150 45,158 Z" fill="var(--forest)" stroke="none"/>
+        <path d="M64,188 L63,136" fill="none" stroke-width="3" stroke-linecap="round"/>
+        <path d="M63,154 C53,149 46,142 42,134 C52,137 60,144 64,152 Z" fill="var(--forest)" stroke="none"/>
+        <path d="M136,188 L137,136" fill="none" stroke-width="3" stroke-linecap="round"/>
+        <path d="M137,154 C147,149 154,142 158,134 C148,137 140,144 136,152 Z" fill="var(--forest)" stroke="none"/>
+        <path d="M154,188 L156,142" fill="none" stroke-width="3" stroke-linecap="round"/>
+        <path d="M156,160 C166,155 173,148 177,140 C167,143 159,150 155,158 Z" fill="var(--forest)" stroke="none"/>
+      </g>
+
+      <!-- near row, taller, with ears of corn -->
+      <g>
+        <path d="M78,192 L76,110" fill="none" stroke="var(--forest)" stroke-width="4" stroke-linecap="round"/>
+        <path d="M76,150 C62,143 52,133 46,120 C60,124 71,134 76,146 Z" fill="var(--forest)"/>
+        <path d="M78,126 C68,121 60,114 54,105 C64,108 73,116 79,124 Z" fill="var(--forest)" opacity="0.8"/>
+        <ellipse cx="66" cy="140" rx="7" ry="12" fill="var(--gold)" stroke="var(--wine-deep)" stroke-width="1" transform="rotate(-18 66 140)"/>
+
+        <path d="M100,196 L100,96" fill="none" stroke="var(--forest)" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M100,144 C84,137 72,127 65,113 C81,117 94,128 100,140 Z" fill="var(--forest)"/>
+        <path d="M100,144 C116,137 128,127 135,113 C119,117 106,128 100,140 Z" fill="var(--forest)"/>
+        <path d="M100,118 C90,112 82,104 77,94 C88,97 97,106 102,116 Z" fill="var(--forest)" opacity="0.8"/>
+        <ellipse cx="100" cy="128" rx="8" ry="14" fill="var(--gold-bright)" stroke="var(--wine-deep)" stroke-width="1.1"/>
+
+        <path d="M122,192 L124,110" fill="none" stroke="var(--forest)" stroke-width="4" stroke-linecap="round"/>
+        <path d="M124,150 C138,143 148,133 154,120 C140,124 129,134 124,146 Z" fill="var(--forest)"/>
+        <path d="M122,126 C132,121 140,114 146,105 C136,108 127,116 121,124 Z" fill="var(--forest)" opacity="0.8"/>
+        <ellipse cx="134" cy="140" rx="7" ry="12" fill="var(--gold)" stroke="var(--wine-deep)" stroke-width="1" transform="rotate(18 134 140)"/>
+      </g>
     </svg>
   </div>
   <div class="eyebrow">Maryland Renaissance Festival</div>
   <h1>King's Korn</h1>
-  <p class="sub">Peruse our menu, full ingredient lists, allergy information, and accepted forms of payment below.</p>
+  <p class="sub">Behold our bill of fare, full ingredient lists, allergy information, and accepted forms of payment below.</p>
   <div class="locale">Crownsville, Maryland</div>
 </header>
 
